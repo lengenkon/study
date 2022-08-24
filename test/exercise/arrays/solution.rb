@@ -1,12 +1,13 @@
 module Exercise
   module Arrays
     class << self
+      def my_max(array)
+        max = array[0]
+        array.each { |item| max = item if item > max }
+        max
+      end
+
       def replace(array)
-        def my_max(array)
-          max = array[0]
-          array.each { |item| max = item if item > max }
-          max
-        end
         array.map! { |item| item.positive? ? my_max(array) : item }
       end
 
