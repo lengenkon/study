@@ -8,11 +8,12 @@ module Exercise
       end
 
       def replace(array)
-        array.map! { |item| item.positive? ? my_max(array) : item }
+        max = my_max(array)
+        array.map! { |item| item.positive? ? max : item }
       end
 
       def search(array, query, first = 0, last = array.size - 1)
-        return -1 if first > last && query > last
+        return -1 if first > last || query > array[last] || query < array[first]
 
         middle = (last + first) / 2
         return middle if query == array[middle]
