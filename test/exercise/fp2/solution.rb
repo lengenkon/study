@@ -9,19 +9,12 @@ module Exercise
         MyArray.new(rest).my_each(array, &block)
       end
 
-      def my_reduce(accumulator = nil, &block)
-        if accumulator.nil?
-          ignore_first = true
-          accumulator = self[0]
-        end
+      def my_reduce(acc = nil, &block)
+        return acc if empty?
 
-        index = 0
-
-        my_each do |element|
-          accumulator = block.call(accumulator, element) unless ignore_first && index.zero?
-          index += 1
-        end
-        accumulator
+        first, *rest = self
+        acc = acc.nil? ? first : block.call(acc, first)
+        MyArray.new(rest).my_reduce(acc, &block)
       end
 
       def my_map
@@ -30,7 +23,7 @@ module Exercise
 
       def my_compact
         my_reduce(MyArray.new) do |acc, element|
-          acc << element unless element.is_a? NilClass
+          acc << element unless element.nil?
           acc
         end
       end
