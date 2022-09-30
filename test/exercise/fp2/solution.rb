@@ -1,20 +1,33 @@
 module Exercise
   module Fp2
     class MyArray < Array
-      # Использовать стандартные функции массива для решения задач нельзя.
-      # Использовать свои написанные функции для реализации следующих - можно.
+      def my_each(&block)
+        return self if empty?
 
-      # Написать свою функцию my_each
-      def my_each; end
+        first, *rest = self
+        block.call(first)
+        MyArray.new(rest).my_each(&block)
+        self
+      end
 
-      # Написать свою функцию my_map
-      def my_map; end
+      def my_reduce(acc = nil, &block)
+        return acc if empty?
 
-      # Написать свою функцию my_compact
-      def my_compact; end
+        first, *rest = self
+        acc = acc.nil? ? first : block.call(acc, first)
+        MyArray.new(rest).my_reduce(acc, &block)
+      end
 
-      # Написать свою функцию my_reduce
-      def my_reduce; end
+      def my_map
+        my_reduce(MyArray.new) { |acc, element| acc << (yield element) }
+      end
+
+      def my_compact
+        my_reduce(MyArray.new) do |acc, element|
+          acc << element unless element.nil?
+          acc
+        end
+      end
     end
   end
 end
