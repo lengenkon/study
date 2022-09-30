@@ -1,12 +1,13 @@
 module Exercise
   module Fp2
     class MyArray < Array
-      def my_each(array = self, &block)
-        return MyArray.new(array) if empty?
+      def my_each(&block)
+        return self if empty?
 
         first, *rest = self
         block.call(first)
-        MyArray.new(rest).my_each(array, &block)
+        MyArray.new(rest).my_each(&block)
+        self
       end
 
       def my_reduce(acc = nil, &block)
